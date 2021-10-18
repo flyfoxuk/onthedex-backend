@@ -1362,6 +1362,20 @@ const main = async() => {
     const cmd_line_arguments = getArgs()
     console.dir(cmd_line_arguments)
 
+
+
+    if (cmd_line_arguments.args['justserver'] == true) {
+        // start the websocket server ready to send info to connected clients
+        initWebsocketServer({
+            '/token-volume': () => wsPublishTokenVolume(true),
+            '/token-list': () => wsPublishTokenList(true),
+        })
+
+        return
+    }
+
+
+
     // load saved data in first
     try {
         if (cmd_line_arguments.args['ignore'] != true) {
