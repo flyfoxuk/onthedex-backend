@@ -37,6 +37,12 @@ fastify.register(require('fastify-websocket'))
 
 
 const initWebsocketServer = async(sendOnConnectFns) => {
+
+
+    fastify.get('/test', (req, reply) => {
+        reply.send({ hello: 'world' })
+    })
+
     
     fastify.get('/token-volume', { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
         const routePath = '/token-volume'
