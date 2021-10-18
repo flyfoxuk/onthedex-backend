@@ -7,7 +7,7 @@ const path = require('path');
 
 
 
-const PORT = 8586;
+const PORT = 443;
 const sslfile_cert = path.join(__dirname, '../ws.cer')
 const sslfile_key = path.join(__dirname, '../ws.key')
 const sslfile_ca = path.join(__dirname, '../ws.ca')     // if required, set to null if not required
