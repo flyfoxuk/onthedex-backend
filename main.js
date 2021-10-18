@@ -1325,7 +1325,7 @@ const childMessagePairGetter = (msg) => {
             // look up base against XRP in the recent trades list, see if we have an average rate over the last X minutes, use that to get an implied rate for this pair going forwards
 
             const pair = listOfRates.find(r => r.base.issuer == ob.issuer && r.base.ccy == ob.ccy && r.quote.issuer == undefined && r.quote.ccy == 'XRP')
-            if (pair != undefined) {
+            if (pair != undefined && pair['prices']) {
                 listOfObligationsByIssuer[ob.issuer].pricefx[ob.ccy] = (pair.prices['mid'] || 0) * priceOracleFeed['XRP/USD']
                 listOfObligationsByIssuer[ob.issuer].mcap[ob.ccy] = +ob.obligation * listOfObligationsByIssuer[ob.issuer].pricefx[ob.ccy]
             }
