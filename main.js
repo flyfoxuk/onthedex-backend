@@ -365,7 +365,7 @@ const getFrontpageTokenVolume = async() => {
                         base_kyc:           listOfObligationsByIssuer[issuer] && listOfObligationsByIssuer[issuer]['kyc'],
                         quote:              (currencyStats.counter.issuer ? currencyStats.counter.issuer + '.' : '') + currencyToAscii(currencyStats.counter.currency),
                         quote_issuer:       (currencyStats.counter.issuer ? currencyStats.counter.issuer : undefined),
-                        quote_kyc:          currencyStats.counter.issuer ? listOfObligationsByIssuer[currencyStats.counter.issuer]['kyc'] : undefined,
+                        quote_kyc:          currencyStats.counter.issuer && listOfObligationsByIssuer[currencyStats.counter.issuer] ? listOfObligationsByIssuer[currencyStats.counter.issuer]['kyc'] : undefined,
                         quote_ccy:          currencyToAscii(currencyStats.counter.currency),
                         
                         traded_vol_base:    currencyStats.sums.base ? (currencyStats.sums.base < 100 ? +formatNumber(currencyStats.sums.base < 10 ? 6 : 4, currencyStats.sums.base) : +currencyStats.sums.base.toFixed(0)) : null,
