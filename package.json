@@ -1,0 +1,21 @@
+{
+  "name": "onethedex-backend",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "fastify": "^3.22.0",
+    "fastify-websocket": "^4.0.0",
+    "https": "^1.0.0",
+    "ripple-lib": "^1.10.0",
+    "ripple-lib-transactionparser": "^0.8.2",
+    "ws": "^8.2.2",
+    "xrpl-client": "^1.9.2"
+  }
+}

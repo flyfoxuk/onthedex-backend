@@ -1,0 +1,144 @@
+// THIS IS BETA SOFTWARE, PROOF-OF-CONCEPT, and UN-OPTIMISED!
+
+
+
+const fs = require('fs');
+const path = require('path');
+
+
+
+const PORT = 8586;
+const sslfile_cert = path.join(__dirname, '../ws.cer')
+const sslfile_key = path.join(__dirname, '../ws.key')
+const sslfile_ca = path.join(__dirname, '../ws.ca')     // if required, set to null if not required
+
+
+const connectedClientsByRoute = {}
+
+
+const fastify = require('fastify')({ 
+    logger: true,
+    https: {
+        cert: sslfile_cert && fs.existsSync(sslfile_cert) ? fs.readFileSync(sslfile_cert) : undefined,
+        key: sslfile_key && fs.existsSync(sslfile_key) ? fs.readFileSync(sslfile_key) : undefined,
+        ca: sslfile_ca && fs.existsSync(sslfile_ca) ? fs.readFileSync(sslfile_ca) : undefined,
+    }
+})
+fastify.register(require('fastify-websocket'))
+
+
+
+
+
+const initWebsocketServer = async(sendOnConnectFns) => {
+    
+    fastify.get('/token-volume', { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
+        const routePath = '/token-volume'
+        const socketID = req.headers['sec-websocket-key']
+        if (!connectedClientsByRoute[routePath]) connectedClientsByRoute[routePath] = {}
+        connectedClientsByRoute[routePath][socketID] = connection;
+
+        fastify.log.info({
+            msg: 'Client connected',
+            socket: socketID
+        })
+
+
+        if (typeof sendOnConnectFns[routePath] == 'function') {
+            sendOnConnectFns[routePath]()
+        }
+
+        connection.socket.on('message', message => {
+            fastify.log.info({
+                msg: 'Message recvd: ' + message,
+                socket: socketID
+            })
+            // console.log(connection.socket)
+        })
+
+
+        connection.socket.on('close', () => {
+            delete connectedClientsByRoute[routePath][socketID]
+            fastify.log.info({
+                msg: 'Client disconnected',
+                socket: socketID
+            })
+        })
+    })
+
+
+    fastify.get('/token-list', { websocket: true }, (connection /* SocketStream */, req /* FastifyRequest */) => {
+        const routePath = '/token-list'
+        const socketID = req.headers['sec-websocket-key']
+        if (!connectedClientsByRoute[routePath]) connectedClientsByRoute[routePath] = {}
+        connectedClientsByRoute[routePath][socketID] = connection;
+
+        fastify.log.info({
+            msg: 'Client connected',
+            socket: socketID
+        })
+
+
+        if (typeof sendOnConnectFns[routePath] == 'function') {
+            sendOnConnectFns[routePath]()
+        }
+
+        connection.socket.on('message', message => {
+            fastify.log.info({
+                msg: 'Message recvd: ' + message,
+                socket: socketID
+            })
+            // console.log(connection.socket)
+        })
+
+
+        connection.socket.on('close', () => {
+            delete connectedClientsByRoute[routePath][socketID]
+            fastify.log.info({
+                msg: 'Client disconnected',
+                socket: socketID
+            })
+        })
+    })
+
+    fastify.listen(PORT, err => {
+        if (err) {
+            fastify.log.error(err)
+            process.exit(1)
+        }
+    })
+    //console.log('fastify ws listening')
+
+    if (!sslfile_cert || !fs.existsSync(sslfile_cert)) {
+        console.log('NOTE: SSL for websocket not found or not specified, websocket established without SSL (may not work correctly)...')
+    }
+
+}
+
+
+
+
+
+
+const sendWebsocketData = async(path, data) => {
+    const connectionsInPath = Object.values(connectedClientsByRoute[path] || [])
+    console.log('connectionsInPath ', path, connectionsInPath.length)
+    if (connectionsInPath.length > 0) {
+        const dataToSendAsJSON = JSON.stringify(data)
+        connectionsInPath.forEach(client => {
+            if (client.socket.readyState == 1) {
+                client.socket.send(dataToSendAsJSON)
+            }
+        })
+    }
+
+}
+
+
+
+
+
+module.exports = {
+    initWebsocketServer,
+    sendWebsocketData,
+}

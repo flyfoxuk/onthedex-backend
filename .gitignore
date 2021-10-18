@@ -5,10 +5,14 @@ output.txt
 DEX_output.txt
 XRPL_API_listOfOrdersByIOU.*
 
-*.json
 DISCONNECTS.txt
+DEBUG_*
 *.cer
 *.key
+*.json
+!package.json
+!package-lock.json
+
 
 # local env files
 .env.local
