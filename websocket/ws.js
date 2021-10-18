@@ -15,15 +15,21 @@ const sslfile_ca = path.join(__dirname, '../ws.ca')     // if required, set to n
 
 const connectedClientsByRoute = {}
 
-
-const fastify = require('fastify')({ 
+// do we want an SSL websocket?  Detect files and setup if present, otherwise run unsecured locally
+const fastifyOptions = { 
     logger: true,
-    https: {
+}
+
+if (sslfile_cert && fs.existsSync(sslfile_cert)) {
+    fastifyOptions.https = {
         cert: sslfile_cert && fs.existsSync(sslfile_cert) ? fs.readFileSync(sslfile_cert) : undefined,
         key: sslfile_key && fs.existsSync(sslfile_key) ? fs.readFileSync(sslfile_key) : undefined,
         ca: sslfile_ca && fs.existsSync(sslfile_ca) ? fs.readFileSync(sslfile_ca) : undefined,
     }
-})
+}
+
+// instantiate the fastify instance
+const fastify = require('fastify')(fastifyOptions)
 fastify.register(require('fastify-websocket'))
 
 
