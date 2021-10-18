@@ -113,7 +113,7 @@ const initWebsocketServer = async(sendOnConnectFns) => {
         })
     })
 
-    fastify.listen(PORT, err => {
+    fastify.listen(PORT, '0.0.0.0', err => {
         if (err) {
             fastify.log.error(err)
             process.exit(1)
