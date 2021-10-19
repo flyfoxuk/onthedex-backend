@@ -1363,13 +1363,15 @@ const main = async() => {
     console.dir(cmd_line_arguments)
 
 
-
     if (cmd_line_arguments.args['justserver'] == true) {
         // start the websocket server ready to send info to connected clients
-        initWebsocketServer({
-            '/token-volume': () => wsPublishTokenVolume(true),
-            '/token-list': () => wsPublishTokenList(true),
-        })
+        initWebsocketServer(
+            cmd_line_arguments.args['port'] ? cmd_line_arguments.args['port'] : 443,
+            {
+                '/token-volume': () => wsPublishTokenVolume(true),
+                '/token-list': () => wsPublishTokenList(true),
+            }
+        )
 
         return
     }

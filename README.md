@@ -12,16 +12,18 @@
      - generate LetsEncrypt cert and key for ws.abc.com
      - make entry in /etc/hosts for ws.abc.com to point to 127.0.0.1
      - place .cer and .key files into repo root named as ws.cer and ws.key
-     - after starting, WS endpoints available on wss://SSL_domain_here:8586/
+     - after starting, WS endpoints available on wss://SSL_domain_here
 
     Option: to run locally unsecured:
-     - delete any ws.cer and ws.key files in repo root.  Project will start with websocket data available on ws://127.0.0.1:8586/
+     - delete any ws.cer and ws.key files in repo root.  Project will start with websocket data available on ws://127.0.0.1
         
 - Install dependencies:
     `npm i`
 
 - To start:
-    `node main.js`
+    `node main.js` to start with websocket running on port 443 (default), or
+
+    `node main.js --port=8586` to start with websocket on your chosen port
 
 - Websocket endpoints available at:
 

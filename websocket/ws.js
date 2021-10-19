@@ -7,7 +7,7 @@ const path = require('path');
 
 
 
-const PORT = 443;
+// const PORT = 443;  not used any more, instead specify on cmdline with --port option if 443 not desired/in use already
 const sslfile_cert = path.join(__dirname, '../ws.cer')
 const sslfile_key = path.join(__dirname, '../ws.key')
 const sslfile_ca = path.join(__dirname, '../ws.ca')     // if required, set to null if not required
@@ -36,7 +36,7 @@ fastify.register(require('fastify-websocket'))
 
 
 
-const initWebsocketServer = async(sendOnConnectFns) => {
+const initWebsocketServer = async(port, sendOnConnectFns) => {
 
 
     fastify.get('/test', (req, reply) => {
@@ -113,7 +113,7 @@ const initWebsocketServer = async(sendOnConnectFns) => {
         })
     })
 
-    fastify.listen(PORT, '0.0.0.0', err => {
+    fastify.listen(port, '0.0.0.0', err => {
         if (err) {
             fastify.log.error(err)
             process.exit(1)
