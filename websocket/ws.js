@@ -40,6 +40,7 @@ const initWebsocketServer = async(port, sendOnConnectFns) => {
 
 
     fastify.get('/test', (req, reply) => {
+        reply.header('Expires', new Date(Date.now() + 2*60*1000).toUTCString())  // 2 minutes test
         reply.send({ hello: 'world',  timeNow: Date()})
     })
 
