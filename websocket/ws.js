@@ -40,7 +40,7 @@ const initWebsocketServer = async(port, sendOnConnectFns) => {
 
 
     fastify.get('/test', (req, reply) => {
-        reply.send({ hello: 'world' })
+        reply.send({ hello: 'world',  timeNow: Date()})
     })
 
     
