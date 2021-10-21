@@ -40,9 +40,10 @@ const initWebsocketServer = async(port, sendOnConnectFns) => {
 
 
     fastify.get('/test', (req, reply) => {
-        // reply.header('Expires', new Date(Date.now() + 2*60*1000).toUTCString())  // 2 minutes test
+        // reply.header('Expires', new Date(Date.now() + 10*1000).toUTCString())  // test
+        reply.header('CDN-Cache-Control', 'max-age=60')
         // reply.header('Cache-Control', 'max-age=60, s-maxage=60, must-revalidate, proxy-revalidate')
-        reply.header('Cache-Control', 'public, max-age=20, stale-while-revalidate=60, max-stale=60, must-revalidate, stale-if-error=60')
+        // reply.header('Cache-Control', 'public, max-age=20, stale-while-revalidate=60, max-stale=60, must-revalidate, stale-if-error=60')
         reply.send({ hello: 'world',  timeNow: Date()})
     })
     
