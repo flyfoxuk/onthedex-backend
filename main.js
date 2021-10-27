@@ -235,9 +235,10 @@ const calculateRunningTotals = async() => {
     statsCalculated = {}  // zero it!
 
     // first, keep trades that are approx 24 hours old or newer - we can discard older trades because at this stage we are not reporting stats beyond 24 hours
-    Object.values(listOfOrdersByIOU).filter(iou => iou.trades && iou.trades.length > 0).forEach(iou => {
-        iou.trades = iou.trades.filter(t => t.ts >= fromDate && t.ts <= toDate)
-    })
+    //! TEMP remove this for debug reasons:
+    // Object.values(listOfOrdersByIOU).filter(iou => iou.trades && iou.trades.length > 0).forEach(iou => {
+    //     iou.trades = iou.trades.filter(t => t.ts >= fromDate && t.ts <= toDate)
+    // })
 
     // now process them to form summary stats
     Object.values(listOfOrdersByIOU).filter(iou => iou.trades && iou.trades.length > 0).forEach(iou => {

@@ -96,7 +96,7 @@ const inboundInstruction = async(message) => {
         }, {})
         for (const iss of Object.keys(issuers)) {
             const obs = await getIssuerObligations(client, iss, message.get_price.ledger_index)
-            if (obs) {
+            if (obs && obs['obligations']) {
                 Object.keys(obs.obligations).forEach(ccyCode => {
                     issuer_obligations.push({
                         issuer: iss,
